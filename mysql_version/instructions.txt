@@ -1,0 +1,48 @@
+Before following the insturctions, make sure Apache and MySQL are running.
+Assuming database name is inventorysystem, username=root, no password.
+
+1. add mysqlshow path to PATH variable
+(bash) cd ~/                     # go to home dir
+(bash) vim .bash_profile         # create .bash_profile
+(vim)  i                         # insert
+(vim)  export PATH=$PATH:/Applications/XAMPP/xamppfiles/bin
+                                 # add the line to the file
+(vim)  esc; :wq                  # save and exit
+(bash) source ~/.bash_profile    # source the file
+(bash) mysqlshow -u root inventorysystem  # print out the database
+
++--------------------+
+|     Databases      |
++--------------------+
+| information_schema |
+| inventorysystem    |
+| inventorytest      |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| test               |
++--------------------+
+
+2. install mysqldiff
+(bash) cpan                      # start CPAN command line tool
+(cpan) install MySQL:Diff        # insall mysqldiff package
+(cpan) quit                      # exit
+(bash) mysqldiff -u root inventorysystem inventorytest  # print out the difference
+
+## mysqldiff 0.43
+## 
+## Run on Wed Sep  2 23:19:44 2015
+## Options: user=root, debug=0
+##
+## ---   db: inventorysystem (user=root)
+## +++   db: inventorytest (user=root)
+
+ALTER TABLE Customer DROP COLUMN customer_phone; # was varchar(50) COLLATE utf8_unicode_ci NOT NULL
+ALTER TABLE Customer DROP COLUMN customer_name; # was varchar(50) COLLATE utf8_unicode_ci NOT NULL
+ALTER TABLE Customer DROP COLUMN customer_email; # was varchar(50) COLLATE utf8_unicode_ci NOT NULL
+
+3. download migrate.sh
+download from https://github.com/stevecomrie/mysql-version-control
+unzip to htdocs/mysql_version/...
+modify the databse config
+run and should see logs and migrations folder created
